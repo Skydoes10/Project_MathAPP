@@ -22,8 +22,8 @@ public class Main {
 		boolean menu = true;
 		int option;
 		while(menu) {
-			System.out.println("\n**********************************************************" +
-								"\nSeleccione una opción para empezar:\n" + 
+			System.out.println("\n******************************************************" +
+								"\nSeleccione una opcion para empezar:\n" + 
 								"\n(1) Agregar un conjunto" + 
 								"\n(2) Eliminar un conjunto" + 
 								"\n(3) Agregar un elemento a un conjunto" + 
@@ -31,7 +31,7 @@ public class Main {
 								"\n(5) Operaciones" + 
 								"\n(6) Mostrar conjuntos" +
 								"\n(0) Salir" +
-								"\n**********************************************************\n"
+								"\n******************************************************\n"
 								);
 		option = sc.nextInt();
 		sc.nextLine();
@@ -52,7 +52,7 @@ public class Main {
 					System.out.println("\nBye!");
 				break;
 			default:
-					System.out.println("\nError, opción no válida");
+					System.out.println("\nError, opcion no valida");
 		}
 		}
 	}
@@ -61,14 +61,14 @@ public class Main {
 		boolean menu = true;
 		while(menu) {
 			System.out.println(
-					"\n************************************************************" +
+					"\n*********************************************************" +
 					"\nDigite la opcion deseada:" +
 					"\n(1) Union de conjuntos"+
 					"\n(2) Interseccion de conjuntos"+
 					"\n(3) Diferencia de conjuntos"+ 
 					"\n(4) Diferencia simetrica de conjuntos"+ 
 					"\n(0) Volver" +
-					"\n************************************************************\n"
+					"\n*********************************************************\n"
 					);
 			int option = sc.nextInt();
 			sc.nextLine();
@@ -96,20 +96,20 @@ public class Main {
 		boolean menu = true;
 		while(menu) {
 			System.out.println(
-					"\n************************************************************" +
+					"\n******************************************************" +
 					"\nDigite la opcion deseada:" +
 					"\n(1) Mostrar un conjunto especifico"+
 					"\n(2) Mostrar todos los conjuntos"+
 					"\n(0) Volver" +
-					"\n************************************************************\n"
+					"\n******************************************************\n"
 					);
 			int option = sc.nextInt();
 			sc.nextLine();
 			switch(option) {
-				case 1:	
+				case 1:	showSet();
 						menu = false;
 					break;
-				case 2:	
+				case 2:	showSets();
 						menu = false;
 					break;
 				case 0:	menu = false;
@@ -163,27 +163,17 @@ public class Main {
 		name2 = sc.nextLine();
 		System.out.println("Digite el nombre del nuevo conjunto:");
 		newName = sc.nextLine();
-		if(option == 1) {
-			mainMathApp.union(name1, name2, newName);
+		System.out.println(mainMathApp.operationString(name1, name2, newName, option));
 		}
-		else if(option == 2) {
-			mainMathApp.intersection(name1, name2, newName);
-		}
-		else if(option == 3) {
-			mainMathApp.difference(name1, name2, newName);
-		}
-		else {
-			mainMathApp.symmetricDifference(name1, name2, newName);
-		}
+	
+	public void showSet() {
+		String setName;
+		System.out.println("Digite el nombre del conjunto que quiere buscar:");
+		setName = sc.nextLine();
+		System.out.println(mainMathApp.showInfoSet(setName));
 	}
 	
-	public String showSet(String name) {
-		
-		return ;
-	}
-	
-	public String showSets() {
-		
-		return ;
+	public void showSets() {
+		System.out.println(mainMathApp.showInfoSets());
 	}
 }

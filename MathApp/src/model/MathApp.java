@@ -12,6 +12,7 @@ public class MathApp {
 	
 	//Builder
 	public MathApp(){
+		sets = new ArrayList<IntegerSet>();
 	}
 	
 	//Getters and Setters
@@ -23,34 +24,11 @@ public class MathApp {
 		this.amount = amount;
 	}//End Getters and Setters
 	
-	
 	public void addSet(String name) {
-		if(sets.isEmpty()) {
-			IntegerSet set = new IntegerSet(name);
-			sets.add(set);
-			System.out.println("El conjunto ha sido agregado");
-			int amount = getAmount();
-			amount++;
-			setAmount(amount);
-		}
-		else {
-			boolean found = false;
-			for(int i=0; i<sets.size() && !found; i++) {
-				IntegerSet findSet = sets.get(i);
-				if(findSet.getName().equalsIgnoreCase(name)) {
-					System.out.println("Ya existe un conjunto con el nombre: "+name);
-					found = true;
-				}
-			}
-			if(found = false) {
-				IntegerSet set = new IntegerSet(name);
-				sets.add(set);
-				System.out.println("El conjunto ha sido agregado");
-				int amount = getAmount();
-				amount++;
-				setAmount(amount);
-			}
-		}
+		IntegerSet set = new IntegerSet(name);
+		sets.add(set);
+		int amount = sets.size();
+		setAmount(amount);
 	}
 	
 	public void removeSet(String name) {
@@ -59,95 +37,124 @@ public class MathApp {
 			IntegerSet findSet = sets.get(i);
 			if(findSet.getName().equalsIgnoreCase(name)) {
 				sets.remove(i);
-				System.out.println("Se elimino el conjunto: "+name);
+				int amount = sets.size();
+				setAmount(amount);
 				found = true;
 			}
 		}
 	}
 	
 	public void addElementToSet(String setName, int element) {
-		if(sets.isEmpty()) {
-			System.out.println("No hay conjuntos agregados");
-		}
-		else {
-			boolean found = false;
-			for(int i=0; i<sets.size() && !found; i++) {
-				IntegerSet findSet = sets.get(i);
-				if(findSet.getName().equalsIgnoreCase(setName)) {
-					findSet.addElement(element);
-					found = true;
-				}
-			}
-			if(found = false) {
-				System.out.println("El conjunto "+setName+" no existe");
-			}
+		IntegerSet obj = findSet(setName);
+		if(obj != null) {
+			obj.addElement(element);
 		}
 	}
 	
 	public void removeElementFromSet(String setName, int element) {
-		boolean found = false;
-		for(int i=0; i<sets.size() && !found; i++) {
-			IntegerSet findSet = sets.get(i);
-			if(findSet.getName().equalsIgnoreCase(setName)) {
-				findSet.removeElement(element);
-				System.out.println("El elemento "+element+" fue eliminado del conjunto "+setName);
-				found = true;
-			}
+		IntegerSet obj = findSet(setName);
+		if(obj != null) {
+			obj.removeElement(element);
 		}
 	}
 	
 	public void union(String name1, String name2, String newName) {
-		boolean found1 = false, found2 = false;
-		for(int i=0; i<sets.size() && !found1; i++) {
-			IntegerSet findSet = sets.get(i);
-			if(findSet.getName().equalsIgnoreCase(name1)) {
-				found1 = true;
-			}
-		}
-		if(found1==true) {
-			for(int i=0; i<sets.size() && !found2; i++) {
-				IntegerSet findSet = sets.get(i);
-				if(findSet.getName().equalsIgnoreCase(name2)) {
-					found2 = true;
-				}
-			}
-			if(found2==true) {
-				
-			}
-			else {
-				System.out.println("El conjunto "+name2+" no se encontro");
-			}
-		}
-		else {
-			System.out.println("El conjunto "+name1+" no se encontro");
-		}
-		
-		
+		IntegerSet obj1 = findSet(name1);
+		IntegerSet obj2 = findSet(name2);
+		IntegerSet newObj = obj1.union(obj2, newName);
+		sets.add(newObj);
+		int amount = sets.size();
+		setAmount(amount);
 		
 	}
 	
 	public void intersection(String name1, String name2, String newName) {
-		
-		
+		IntegerSet obj1 = findSet(name1);
+		IntegerSet obj2 = findSet(name2);
+		IntegerSet newObj = obj1.intersection(obj2, newName);
+		sets.add(newObj);
+		int amount = sets.size();
+		setAmount(amount);
 	}
 	
 	public void difference(String name1, String name2, String newName) {
-		
-		
+		IntegerSet obj1 = findSet(name1);
+		IntegerSet obj2 = findSet(name2);
+		IntegerSet newObj = obj1.difference(obj2, newName);
+		sets.add(newObj);
+		int amount = sets.size();
+		setAmount(amount);
 	}
 	
 	public void symmetricDifference(String name1, String name2, String newName) {
-		
-		
+		IntegerSet obj1 = findSet(name1);
+		IntegerSet obj2 = findSet(name2);
+		IntegerSet newObj = obj1.symmetricDifference(obj2, newName);
+		sets.add(newObj);
+		int amount = sets.size();
+		setAmount(amount);
 	}
 	
 	public String showInfoSet(String name) {
-		
-		return ;
+		String out = "Error, el conjunto "+name+" no existe";
+		IntegerSet obj = findSet(name);
+		if(obj != null) {
+			out = obj.showContents();
+		}
+		return out;
 	}
 	
 	public String showInfoSets() {
-		
-		return ;
+		String out = "";
+		for(int i=0; i<sets.size(); i++) {
+			IntegerSet set = sets.get(i);
+			out += set.showContents();
+		}
+		return out;
+	}
+	
+	public IntegerSet findSet(String name) {
+		IntegerSet foundSet = null;
+		boolean found = false;
+		for(int i=0; i<sets.size() && !found; i++) {
+			if(sets.get(i).getName().equalsIgnoreCase(name)) {
+				foundSet = sets.get(i);
+				found = true;
+			}
+		}
+		return foundSet;
+	}
+	
+	public String operationString(String name1, String name2, String newName, int option) {
+		String message = "";
+		IntegerSet obj1 = findSet(name1);
+		IntegerSet obj2 = findSet(name2);
+		if(obj1 == null) {
+			message = "Error, el conjunto "+name1+" no existe";
+		}
+		else if(obj2 == null) {
+			message = "Error, el conjunto "+name2+" no existe";
+		}
+		else if(obj1 != null && obj2 != null && option == 1) {
+			union(name1, name2, newName);
+			IntegerSet objUnion = findSet(newName);
+			message = "Union realizada exitosamente "+objUnion.showContents();
+		}
+		else if(obj1 != null && obj2 != null && option == 2) {
+			intersection(name1, name2, newName);
+			IntegerSet objInter = findSet(newName);
+			message = "Interseccion realizada exitosamente "+objInter.showContents();
+		}
+		else if(obj1 != null && obj2 != null && option == 3) {
+			difference(name1, name2, newName);
+			IntegerSet objDiffe = findSet(newName);
+			message = "Diferencia realizada exitosamente "+objDiffe.showContents();
+		}
+		else if(obj1 != null && obj2 != null && option == 4) {
+			symmetricDifference(name1, name2, newName);
+			IntegerSet objSyDif = findSet(newName);
+			message = "Diferencia simetrica realizada exitosamente "+objSyDif.showContents();	
+		}
+		return message;
 	}
 }
